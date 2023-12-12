@@ -1,84 +1,90 @@
-function getComputerChoice(){
-    let choice= ["rock", "paper", "scissors"]
-    let finalChoice=choice[(Math.floor(Math.random() * choice.length))]
-    return finalChoice
-    
+let wins = 0;
+let losses = 0;
+let ties = 0;
+const winningScore = 5;
+
+function getComputerChoice() {
+    let choices = ["rock", "paper", "scissors"];
+    let choice = choices[Math.floor(Math.random() * choices.length)];
+    return choice;
 }
 
-let playerSelection;
-console.log(playerSelection)
-
-let computerSelection = getComputerChoice().toLowerCase();
-
-console.log(computerSelection)
-
-let win = 0;
-let loss = 0 ;
-let tie = 0;
-
-function playRound(playerSelection,computerSelection){
-    //computerSelection = computerSelection.toLowerCase()
-    
-    if (computerSelection === "paper" && playerSelection === "rock"){
-        loss++
-    return alert ("You lose! Paper beats rock!")
+function playRound(playerSelection) {
+    if (wins === winningScore || losses === winningScore) {
+        endGame();
+        return;
     }
 
-    else if (computerSelection === "rock" && playerSelection === "paper"){
-        win++
-    return alert ("You win! Paper beats rock!")
+    let computerSelection = getComputerChoice();
+
+    if (
+        (computerSelection === "paper" && playerSelection === "rock") ||
+        (computerSelection === "rock" && playerSelection === "scissors") ||
+        (computerSelection === "scissors" && playerSelection === "paper")
+    ) {
+        losses++;
+        displayRoundResult(`You lose! ${computerSelection} beats ${playerSelection}!`);
+    } else if (
+        (playerSelection === "paper" && computerSelection === "rock") ||
+        (playerSelection === "rock" && computerSelection === "scissors") ||
+        (playerSelection === "scissors" && computerSelection === "paper")
+    ) {
+        wins++;
+        displayRoundResult(`You win! ${playerSelection} beats ${computerSelection}!`);
+    } else {
+        ties++;
+        displayRoundResult("It's a tie!");
     }
 
-    else if (computerSelection === "rock" && playerSelection === "scissors"){
-        loss++
-    return alert ("You lose! Rock beats scissors!")
-    }
+    updateStats();
+    checkWinner();
+}
 
-    else if (computerSelection === "scissors" && playerSelection === "rock"){
-        win++
-    return alert ("You win! Rock beats scissors!")
-    }
+function displayRoundResult(result) {
+    const roundResult = document.getElementById("roundResult");
+    roundResult.textContent = result;
+}
 
-    else if (computerSelection === "scissors" && playerSelection === "paper"){
-        loss++
-    return alert ("You lose! Scissors beats paper!")
-    }
+function updateStats() {
+    const winsElement = document.getElementById("wins");
+    const lossesElement = document.getElementById("losses");
+    const tiesElement = document.getElementById("ties");
 
-    else if (computerSelection === "paper" && playerSelection === "paper"){
-        tie++
-     return alert ("Tie!")
-    }
-    
-    else if (computerSelection === "rock" && playerSelection === "rock"){
-        tie++
-        return alert ("Tie!")
-        }
+    winsElement.textContent = wins;
+    lossesElement.textContent = losses;
+    tiesElement.textContent = ties;
+}
 
-    else if (computerSelection === "scissors" && playerSelection === "scissors"){
-        tie++
-        return alert ("Tie!")
-        }
-    
-    else{
-    return alert ("Invalid input")
+function checkWinner() {
+    if (wins === winningScore) {
+        endGame("You win the game!");
+    } else if (losses === winningScore) {
+        endGame("Computer wins the game!");
     }
+}
 
+function endGame(message = "") {
+    displayRoundResult(message);
+    disableButtons();
+}
+
+function disableButtons() {
+    const buttons = document.getElementsByTagName("button");
+    for (let button of buttons) {
+        button.disabled = true;
     }
-    
-    
-    
+}
 
-    function game(){
-       
-       for ( let i = 0; i < 5; i++ ){
-        playerSelection =  prompt("Enter your choice: ").toLowerCase()
-         playRound(playerSelection, computerSelection)
-         
-       }
-        
-    }
-    game()
 
-    alert(`Wins: ${win}`)
-    alert(`Losses: ${loss}`)
-    alert(`Tie: ${tie}`)
+function updateStats() {
+    const winsElement = document.getElementById("wins");
+    const lossesElement = document.getElementById("losses");
+    const tiesElement = document.getElementById("ties");
+
+    winsElement.textContent = wins;
+    lossesElement.textContent = losses;
+    tiesElement.textContent = ties;
+}
+
+
+
